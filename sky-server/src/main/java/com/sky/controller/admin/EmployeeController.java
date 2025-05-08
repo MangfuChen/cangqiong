@@ -100,4 +100,35 @@ public class EmployeeController {
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
     }
+
+
+    @PostMapping("/status/{status}")
+    @ApiOperation(value = "员工启用或禁用")
+    public Result startOrStop(@PathVariable Integer status,Long id){
+        log.info("员工启用或禁用{},{}",status,id);
+        return employeeService.startOrStop(status,id);
+    }
+
+    /**
+     * 根据id查询员工
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询员工")
+    public Result<Employee> getByid(@PathVariable Long id){
+        Employee employee = employeeService.getById(id);
+        employee.setPassword("****");
+        return Result.success(employee);
+    }
+
+    /**
+     * 修改员工信息
+     * @return
+     */
+    @PutMapping("")
+    @ApiOperation(value = "修改员工信息")
+    public Result updateEmployee(@RequestBody EmployeeDTO employeeDTO){
+        return employeeService.updateEmployee(employeeDTO);
+    }
 }

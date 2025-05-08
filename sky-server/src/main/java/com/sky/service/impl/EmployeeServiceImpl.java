@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
@@ -108,6 +106,41 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 //        Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO);
 //        return new PageResult(page.getTotal(),page.getResult());
         return new PageResult(page.getTotal(),page.getResult());
+    }
+
+    @Override
+    public Result startOrStop(Integer status, Long id) {
+        Employee employee = Employee.
+                builder().
+                id(id).
+                status(status).
+                updateTime(LocalDateTime.now()).
+                updateUser(BaseContext.getCurrentId()).
+                build();
+        boolean flag = updateById(employee);
+        if (flag){
+            return Result.success();
+        }
+        return Result.error("修改失败，请稍后重试");
+    }
+
+    /**
+     * 员工修改
+     * @param employeeDTO
+     * @return
+     */
+    @Override
+    public Result updateEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        boolean flag = updateById(employee);
+        if (flag){
+            return Result.success();
+        }
+        return Result.error("修改失败，请稍后重试");
     }
 
 }
