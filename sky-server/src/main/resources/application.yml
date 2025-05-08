@@ -37,3 +37,20 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+
+
+
+knife4j:
+  enable: true
+
+
+
+mybatis-plus:
+  configuration:
+    # MyBatis 配置
+    map-underscore-to-camel-case: true
+  global-config:
+    # 全局配置
+    db-config:
+      # 数据库配置
+      id-type: ASSIGN_ID

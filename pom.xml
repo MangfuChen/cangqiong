@@ -24,8 +24,8 @@
         <commons.lang>2.6</commons.lang>
         <druid>1.2.1</druid>
         <pagehelper>1.3.0</pagehelper>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <aliyun.sdk.oss>3.10.2</aliyun.sdk.oss>
-        <knife4j>3.0.2</knife4j>
         <aspectj>1.9.4</aspectj>
         <jjwt>0.9.1</jjwt>
         <jaxb-api>2.3.1</jaxb-api>
@@ -38,7 +38,11 @@
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.spring}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -69,11 +73,6 @@
                 <version>${pagehelper}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
-                <version>${knife4j}</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.aspectj</groupId>
@@ -121,6 +120,13 @@
                 <groupId>com.github.wechatpay-apiv3</groupId>
                 <artifactId>wechatpay-apache-httpclient</artifactId>
                 <version>0.4.8</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
+                <version>4.4.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

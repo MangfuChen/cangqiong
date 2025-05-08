@@ -1,19 +1,22 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/employee")
 @Slf4j
+@Api(value = "员工接口")
 public class EmployeeController {
 
     @Autowired
@@ -38,6 +42,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/login")
+    @ApiOperation(value = "员工登录")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
 
@@ -67,8 +72,32 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/logout")
+    @ApiOperation(value = "员工登出")
     public Result<String> logout() {
         return Result.success();
     }
 
+    /**
+     * 员工添加
+     * @param employeeDTO
+     * @return
+     */
+    @PostMapping
+    @ApiOperation(value = "员工添加")
+    public Result save(@RequestBody EmployeeDTO employeeDTO){
+        log.info("新增员工{}",employeeDTO);
+        return employeeService.saveEmp(employeeDTO);
+    }
+
+    /**
+     * 员工分页查询
+     * @param employeePageQueryDTO
+     * @return
+     */
+    @GetMapping("/page")
+    @ApiOperation(value = "员工分页查询")
+    public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO){
+        PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
+        return Result.success(pageResult);
+    }
 }
