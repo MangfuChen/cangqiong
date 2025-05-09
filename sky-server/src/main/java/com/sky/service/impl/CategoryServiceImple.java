@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.annotation.AutoFill;
 import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
+import com.sky.enumeration.OperationType;
 import com.sky.mapper.CategoryMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
@@ -24,14 +26,10 @@ public class CategoryServiceImple extends ServiceImpl<CategoryMapper, Category> 
     @Autowired
     private CategoryMapper categoryMapper;
     @Override
-    public Result saveCate(CategoryDTO categoryDTO) {
-        Category category = new Category();
+    @AutoFill(OperationType.INSERT)
+    public Result saveCate(Category category, CategoryDTO categoryDTO) {
         BeanUtils.copyProperties(categoryDTO, category);
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateTime(LocalDateTime.now());
         category.setStatus(0);
-        category.setUpdateUser(BaseContext.getCurrentId());
-        category.setCreateUser(BaseContext.getCurrentId());
         boolean flag = save(category);
         if (flag){
             return Result.success();
@@ -47,18 +45,15 @@ public class CategoryServiceImple extends ServiceImpl<CategoryMapper, Category> 
                 like(categoryPageQueryDTO.getName()!=null,Category::getName,categoryPageQueryDTO.getName())
                 .eq(categoryPageQueryDTO.getType()!=null, Category::getType,categoryPageQueryDTO.getType())
         ;
-
         Page<Category> page = (Page<Category>)categoryMapper.selectList(queryWrapper);
         return new PageResult(page.getTotal(),page.getResult());
     }
 
     @Override
-    public Result startOrStop(Integer status, Long id) {
-        Category category = new Category();
+    @AutoFill(OperationType.UPDATE)
+    public Result startOrStop(Category category, Integer status, Long id) {
         category.setId(id);
         category.setStatus(status);
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
         boolean flag = updateById(category);
         if (flag){
             return Result.success();
@@ -67,11 +62,9 @@ public class CategoryServiceImple extends ServiceImpl<CategoryMapper, Category> 
     }
 
     @Override
-    public Result updateCategory(CategoryDTO categoryDTO) {
-        Category category = new Category();
+    @AutoFill(OperationType.UPDATE)
+    public Result updateCategory(Category category, CategoryDTO categoryDTO) {
         BeanUtils.copyProperties(categoryDTO, category);
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
         boolean flag = updateById(category);
         if (flag){
             return Result.success();

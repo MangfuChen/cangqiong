@@ -17,11 +17,11 @@ public interface EmployeeService extends IService<Employee> {
      */
     Employee login(EmployeeLoginDTO employeeLoginDTO);
 
-    Result saveEmp(EmployeeDTO employeeDTO);
+    Result saveEmp(Employee employee, EmployeeDTO employeeDTO);
 
     PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
 
-    Result startOrStop(Integer status, Long id);
+    Result startOrStop(Employee employee, Integer status, Long id);
 
-    Result updateEmployee(EmployeeDTO employeeDTO);
+    Result updateEmployee(Employee employee, EmployeeDTO employeeDTO);
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.annotation.AutoFill;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
@@ -12,6 +13,7 @@ import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.enumeration.OperationType;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
@@ -68,21 +70,21 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     }
 
     @Override
-    public Result saveEmp(EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
+    @AutoFill(OperationType.INSERT)
+    public Result saveEmp(Employee employee, EmployeeDTO employeeDTO) {
         BeanUtils.copyProperties(employeeDTO, employee);
         //账号状态，1为正常状态
         employee.setStatus(StatusConstant.ENABLE);
         //创建时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
         //添加员工默认密码为123456
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
         //设置当前记录创建人ID和修改人ID
-        Long currentId = BaseContext.getCurrentId();
-        employee.setCreateUser(currentId);
-        employee.setUpdateUser(currentId);
+//        Long currentId = BaseContext.getCurrentId();
+//        employee.setCreateUser(currentId);
+//        employee.setUpdateUser(currentId);
         boolean flag = save(employee);
         System.out.println(flag);
         if (flag){
@@ -109,16 +111,19 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     }
 
     @Override
-    public Result startOrStop(Integer status, Long id) {
-        Employee employee = Employee.
-                builder().
-                id(id).
-                status(status).
-                updateTime(LocalDateTime.now()).
-                updateUser(BaseContext.getCurrentId()).
-                build();
-        boolean flag = updateById(employee);
-        if (flag){
+//    @AutoFill(OperationType.UPDATE)
+    public Result startOrStop(Employee employee, Integer status, Long id) {
+//        Employee employee = Employee.
+//                builder().
+//                id(id).
+//                status(status).
+//                updateTime(LocalDateTime.now()).
+//                updateUser(BaseContext.getCurrentId()).
+//                build();
+        employee.setId(id);
+        employee.setStatus(status);
+        int flag = employeeMapper.updateById(employee);
+        if (flag>0){
             return Result.success();
         }
         return Result.error("修改失败，请稍后重试");
@@ -126,15 +131,15 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     /**
      * 员工修改
+     *
+     * @param employee
      * @param employeeDTO
      * @return
      */
     @Override
-    public Result updateEmployee(EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
+    @AutoFill(OperationType.UPDATE)
+    public Result updateEmployee(Employee employee, EmployeeDTO employeeDTO) {
         BeanUtils.copyProperties(employeeDTO, employee);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
 
         boolean flag = updateById(employee);
         if (flag){

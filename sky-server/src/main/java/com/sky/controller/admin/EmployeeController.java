@@ -86,7 +86,7 @@ public class EmployeeController {
     @ApiOperation(value = "员工添加")
     public Result save(@RequestBody EmployeeDTO employeeDTO){
         log.info("新增员工{}",employeeDTO);
-        return employeeService.saveEmp(employeeDTO);
+        return employeeService.saveEmp(new Employee(),employeeDTO);
     }
 
     /**
@@ -106,7 +106,7 @@ public class EmployeeController {
     @ApiOperation(value = "员工启用或禁用")
     public Result startOrStop(@PathVariable Integer status,Long id){
         log.info("员工启用或禁用{},{}",status,id);
-        return employeeService.startOrStop(status,id);
+        return employeeService.startOrStop(new Employee(),status,id);
     }
 
     /**
@@ -129,6 +129,6 @@ public class EmployeeController {
     @PutMapping("")
     @ApiOperation(value = "修改员工信息")
     public Result updateEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return employeeService.updateEmployee(employeeDTO);
+        return employeeService.updateEmployee(new Employee(),employeeDTO);
     }
 }

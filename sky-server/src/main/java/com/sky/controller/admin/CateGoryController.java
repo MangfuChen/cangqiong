@@ -28,7 +28,7 @@ public class CateGoryController {
     @ApiOperation(value = "分类添加")
     public Result save(@RequestBody CategoryDTO categoryDTO){
         log.info("分类添加{}",categoryDTO);
-        return categoryService.saveCate(categoryDTO);
+        return categoryService.saveCate(new Category(),categoryDTO);
     }
 
     @GetMapping("/page")
@@ -42,7 +42,7 @@ public class CateGoryController {
     @ApiOperation(value = "分类启用或禁用")
     public Result startOrStop(@PathVariable Integer status,Long id){
         log.info("分类启用或禁用{},{}",status,id);
-        return categoryService.startOrStop(status,id);
+        return categoryService.startOrStop(new Category(),status,id);
     }
 
 
@@ -56,7 +56,7 @@ public class CateGoryController {
     @PutMapping("")
     @ApiOperation(value = "修改分类信息")
     public Result updateCategory(@RequestBody CategoryDTO categoryDTO){
-        return categoryService.updateCategory(categoryDTO);
+        return categoryService.updateCategory(new Category(),categoryDTO);
     }
 
     @DeleteMapping("")
