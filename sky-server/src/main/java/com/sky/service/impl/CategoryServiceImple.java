@@ -14,17 +14,19 @@ import com.sky.mapper.CategoryMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImple extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
-    @Autowired
-    private CategoryMapper categoryMapper;
+    private final CategoryMapper categoryMapper;
     @Override
     @AutoFill(OperationType.INSERT)
     public Result saveCate(Category category, CategoryDTO categoryDTO) {
@@ -70,5 +72,16 @@ public class CategoryServiceImple extends ServiceImpl<CategoryMapper, Category> 
             return Result.success();
         }
         return Result.error("修改失败");
+    }
+
+    @Override
+    public List<Category> pageQueryList(CategoryPageQueryDTO categoryPageQueryDTO) {
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().
+                like(categoryPageQueryDTO.getName()!=null,Category::getName,categoryPageQueryDTO.getName())
+                .eq(categoryPageQueryDTO.getType()!=null, Category::getType,categoryPageQueryDTO.getType())
+        ;
+        List<Category> categories = categoryMapper.selectList(queryWrapper);
+        return  categories;
     }
 }

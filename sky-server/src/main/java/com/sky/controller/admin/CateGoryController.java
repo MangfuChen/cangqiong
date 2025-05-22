@@ -12,17 +12,20 @@ import com.sky.result.Result;
 import com.sky.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/category")
 @Slf4j
 @Api(value = "分类接口")
+@RequiredArgsConstructor
 public class CateGoryController {
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @PostMapping
     @ApiOperation(value = "分类添加")
@@ -76,8 +79,8 @@ public class CateGoryController {
 
     @GetMapping("/list")
     @ApiOperation(value = "根据类型查询分类")
-    public Result<PageResult> pageByType(CategoryPageQueryDTO categoryPageQueryDTO){
-        PageResult pageResult = categoryService.pageQuery(categoryPageQueryDTO);
-        return Result.success(pageResult);
+    public Result<List<Category>> pageByType(CategoryPageQueryDTO categoryPageQueryDTO){
+        List<Category> list = categoryService.pageQueryList(categoryPageQueryDTO);
+        return Result.success(list);
     }
 }

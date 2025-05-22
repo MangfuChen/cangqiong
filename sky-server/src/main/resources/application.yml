@@ -12,11 +12,25 @@ spring:
       url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
+  redis:
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password: ${sky.redis.password}
+    database: ${sky.redis.database}
+mybatis-plus:
+  configuration:
+    # MyBatis 配置
+    map-underscore-to-camel-case: true
+  global-config:
+    # 全局配置
+    db-config:
+      # 数据库配置
+      id-type: ASSIGN_ID
+  type-aliases-package: com.sky.entity
 
 mybatis:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.sky.entity
   configuration:
     #开启驼峰命名
     map-underscore-to-camel-case: true
@@ -37,6 +51,29 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+    user-secret-key: itcmr
+    user-ttl: 7200000
+    user-token-name: authentication
+  alioss:
+    access-key-id: ${sky.alioss.access-key-id}
+    access-key-secret: ${sky.alioss.access-key-secret}
+    bucket-name: ${sky.alioss.bucket-name}
+    endpoint: ${sky.alioss.endpoint}
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}
+    #微信支付的配置，目前无法实现
+    mchid: ${}
+    mch-serial-no: ${}
+    private-key-file-path: ${}
+    api-v3-key: ${}
+    we-chat-pay-cert-file-path: ${}
+    notify-url: ${}
+    refund-notify-url: ${}
+  shop:
+    address: ${sky.shop.address}
+  baidu:
+    ak: ${sky.baidu.ak}
 
 
 
@@ -45,12 +82,5 @@ knife4j:
 
 
 
-mybatis-plus:
-  configuration:
-    # MyBatis 配置
-    map-underscore-to-camel-case: true
-  global-config:
-    # 全局配置
-    db-config:
-      # 数据库配置
-      id-type: ASSIGN_ID
+
+
